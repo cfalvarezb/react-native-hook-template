@@ -5,6 +5,8 @@ import React from 'react';
 import colors from '../Themes/Colors';
 import styles from './DrawerNavigator.Style';
 import CounterScreen from '../Counter/Counter.Screen';
+import ContactsScreen from '../Contacts/Contacts.screen';
+import DropDownScreen from '../DropDown/DropDown.screen';
 
 const Drawer = createDrawerNavigator();
 
@@ -15,6 +17,16 @@ const DrawerNavigatorScreen = () => {
         activeTintColor: colors.primary,
         labelStyle: styles.textItemMenu,
       }}>
+      <Drawer.Screen
+        name="DropDownScreen"
+        component={DropDownScreen}
+        options={{drawerLabel: 'DropDown'}}
+      />
+      <Drawer.Screen
+        name="ContactsScreen"
+        component={ContactsScreen}
+        options={{drawerLabel: 'Contacts'}}
+      />
       <Drawer.Screen
         name="ProfileScreen"
         component={ProfileScreen}

@@ -22,6 +22,9 @@ const ProfileScreen = () => {
   const dispatch = useDispatch();
   const getProfile = () => dispatch(getProfileRequest('duytq94'));
 
+  console.log("profile: ", profile);
+  console.log("getProfile: ", getProfile);
+
   const goDetailScreen = () => {
     navigation.navigate('DetailProfileScreen', {});
   };
@@ -44,7 +47,7 @@ const ProfileScreen = () => {
           />
         </TouchableOpacity>
         <View style={styles.viewWrapTitleToolbar}>
-          <Text style={styles.titleToolbar}>Profile</Text>
+          <Text style={styles.titleToolbar}>Profiless</Text>
         </View>
         <View style={styles.viewWrapIcRight} />
       </View>

@@ -9,6 +9,9 @@ import rootReducer from './src/reducers';
 import rootSaga from './src/sagas';
 import RootContainer from './src/Root/RootContainer.Screen';
 import 'react-native-gesture-handler';
+import { ActivityIndicator, View } from "react-native";
+import ApplicationStyle from './src/Themes/Application.Style';
+
 
 const sagaMiddleware = createSagaMiddleware();
 const persistConfig = {
@@ -23,11 +26,23 @@ const persistor = persistStore(store);
 
 sagaMiddleware.run(rootSaga);
 
+export class RenderLoading extends Component {
+  render(){
+    return (
+      <View style={ApplicationStyle.loading}>
+        <ActivityIndicator size="large" color="#000000" />
+      </View>
+    )
+  }
+  
+}
+
 export default class App extends Component {
+
   render() {
     return (
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+        <PersistGate loading={<RenderLoading />} persistor={persistor}>
           <RootContainer />
         </PersistGate>
       </Provider>
