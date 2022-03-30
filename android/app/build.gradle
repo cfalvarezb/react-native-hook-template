@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 import com.android.build.OutputFile
@@ -29,6 +30,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "0.0.1"
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -43,6 +45,11 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
+    }
+    
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
 
     applicationVariants.all { variant ->
@@ -62,6 +69,9 @@ android {
 }
 
 dependencies {
+
+    implementation 'androidx.multidex:multidex:2.0.1'
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -88,6 +98,17 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    implementation platform('com.google.firebase:firebase-bom:29.2.0')
+
+    // Firebase Authentication (Java)
+    implementation 'com.google.firebase:firebase-auth'
+
+    // Google Sign In SDK (only required for Google Sign In)
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
+
+    implementation "com.google.firebase:firebase-storage:15.0.2"
+
 }
 
 // Run this once to be able to run the application with BUCK

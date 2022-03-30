@@ -9,6 +9,7 @@ import DrawerNavigatorScreen from '../DrawerNavigator/DrawerNavigator.Screen';
 import Toast from 'react-native-simple-toast';
 import {useDispatch, useSelector} from 'react-redux';
 import {clearNetworkFail} from '../actions';
+import LoginScreen from '../Login/Login.Screen';
 
 const Stack = createStackNavigator();
 
@@ -61,7 +62,8 @@ const RootContainerScreen = () => {
   return (
     <View style={styles.mainContainer}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Drawer" headerMode={'none'}>
+        <Stack.Navigator initialRouteName="Login" headerMode={'none'}>
+          <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Drawer" component={DrawerNavigatorScreen} />
           <Stack.Screen
             name="DetailProfileScreen"

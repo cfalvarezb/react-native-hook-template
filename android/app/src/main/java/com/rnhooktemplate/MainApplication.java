@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.List;
 
+import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
+import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -38,7 +41,9 @@ public class MainApplication extends Application implements ReactApplication {
           new VectorIconsPackage(),
           new RNGestureHandlerPackage(),
           new AsyncStoragePackage(),
-          new SafeAreaContextPackage()
+          new SafeAreaContextPackage(),
+          new ReactNativeFirebaseAppPackage(),
+          new ReactNativeFirebaseAuthPackage()
       );
     }
 
