@@ -24,6 +24,7 @@ import java.util.List;
 
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
+import io.invertase.firebase.database.ReactNativeFirebaseDatabasePackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -43,7 +44,8 @@ public class MainApplication extends Application implements ReactApplication {
           new AsyncStoragePackage(),
           new SafeAreaContextPackage(),
           new ReactNativeFirebaseAppPackage(),
-          new ReactNativeFirebaseAuthPackage()
+          new ReactNativeFirebaseAuthPackage(),
+          new ReactNativeFirebaseDatabasePackage()
       );
     }
 

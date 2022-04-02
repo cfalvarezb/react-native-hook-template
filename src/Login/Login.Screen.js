@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 
 /* para login anonimo
 auth()
@@ -22,6 +23,11 @@ auth()
   .signInWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
   .then(() => {
     console.log('User account created & signed in!');
+    
+    database().ref('/items').push({
+      name: "item"
+    });
+
   })
   .catch(error => {
     if (error.code === 'auth/email-already-in-use') {
