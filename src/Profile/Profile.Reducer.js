@@ -1,5 +1,5 @@
 import {
-  GET_PROFILE_AIL,
+  GET_PROFILE_FAIL,
   GET_PROFILE_REQUEST,
   GET_PROFILE_SUCCESS,
 } from './Profile.Action';
@@ -20,7 +20,7 @@ export const getProfile = (state = initialState, action) => {
         data: action.payload.data,
         err: null,
       };
-    case GET_PROFILE_AIL:
+    case GET_PROFILE_FAIL:
       return {
         fetching: false,
         data: null,
