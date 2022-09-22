@@ -9,6 +9,7 @@ import rootReducer from './src/reducers';
 import rootSaga from './src/sagas';
 import RootContainer from './src/Root/RootContainer.Screen';
 import 'react-native-gesture-handler';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 const sagaMiddleware = createSagaMiddleware();
 const persistConfig = {
@@ -26,11 +27,13 @@ sagaMiddleware.run(rootSaga);
 export default class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <RootContainer />
-        </PersistGate>
-      </Provider>
+        <Provider store={store}>
+          <PaperProvider>
+            <PersistGate loading={null} persistor={persistor}>
+              <RootContainer />
+            </PersistGate>
+          </PaperProvider>
+        </Provider>
     );
   }
 }

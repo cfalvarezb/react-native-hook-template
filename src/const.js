@@ -13,3 +13,7 @@ export const fontFamily = {
   demiBold: 'iCielVAGRoundedNext-DemiBold',
   lightItalic: 'iCielVAGRoundedNext-LightItalic',
 };
+
+export const errorsFirebase = {
+  permissionDenied: 'database/permission-denied'
+}
