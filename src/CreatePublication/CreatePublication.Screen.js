@@ -5,7 +5,7 @@ import database from '@react-native-firebase/database';
 import styles from './CreatePublication.Style';
 import { errorsFirebase } from '../const';
 import {getUniqueId} from 'react-native-device-info';
-import { TextInput, Button, Text } from 'react-native-paper';
+import { TextInput, Button, Text, Snackbar } from 'react-native-paper';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 
@@ -16,6 +16,8 @@ const CreatePublicationScreen = () => {
   const [textDescription, onChangeTextDescription] = useState(null);
   const [buttonImageDisabled, setButtonImageDisabled] = useState(true);
   const [imageBase64, setImageBase64]  = useState(null);
+  const [visible, setVisible] = React.useState(false);
+  const onDismissSnackBar = () => setVisible(false);
   const refTextTitle = useRef(null);
   const refTextDescription = useRef(null);
 
@@ -51,22 +53,10 @@ const CreatePublicationScreen = () => {
       getUniqueId: getUniqueId()
     }).then((data)=> {
       console.log("Data: ", data);
-      Alert.alert(
-        "Aviso",
-        "Publicacion guardada exitosamente",
-        [
-          { 
-            text: "OK", 
-            onPress: () => {
-              console.log("Pendiente que hace");
-              onChangeTextDescription(null);
-              onChangeTextTitle(null);
-              setImageBase64(null)
-              //navigation.navigate("")
-            }
-          }
-        ]
-      );
+      onChangeTextDescription(null);
+      onChangeTextTitle(null);
+      setImageBase64(null);
+      setVisible(!visible)
     }).catch((err)=> {
       console.log("Err: ", err.code);
       handleErrorsFirebase(err.code);
@@ -92,6 +82,7 @@ const CreatePublicationScreen = () => {
         value={textTitle}
         label={"Titulo"}
         ref={refTextTitle}
+        textColor={ "black" }
       />
       <TextInput
         style={styles.inputArea}
@@ -101,22 +92,39 @@ const CreatePublicationScreen = () => {
         numberOfLines={10}
         label={"Descripcion"}
         ref={refTextDescription}
+        textColor={ "black" }
       />
-      <Button style={styles.button}
+      <Button 
+        style={styles.button}
         onPress={ async ()=>{
           const result = await launchImageLibrary({includeBase64: true});
           setImageBase64(( result.didCancel ) ? imageBase64 : result.assets[0].base64);
           validateFields();
-        }}>
+        }}
+        textColor={ "black" }
+      >
         Subir Imagen
       </Button>
       <Button 
         style={styles.button}
         onPress={onPress}
         disabled={ buttonImageDisabled}
+        textColor={ "black" }
       >
         Crear
       </Button>
+      <Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'Ok',
+          onPress: () => {
+            // Do something
+            navigation.navigate("ListPublications");
+          },
+        }}>
+        Publicacion guardada exitosamente
+      </Snackbar>
     </View>
   );
 

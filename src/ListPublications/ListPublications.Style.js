@@ -3,21 +3,13 @@ import { SectionList, StyleSheet, Text, View } from 'react-native';
 import ApplicationStyle from '../Themes/Application.Style';
 import {fontFamily, fontSize} from '../const';
 import colors from '../Themes/Colors';
+import { color } from 'react-native-reanimated';
 
 export default StyleSheet.create({
   container: {
-   flex: 1,
+    flexGrow: 1,
    paddingTop: 22,
-   backgroundColor: "silver"
-  },
-  sectionHeader: {
-    paddingTop: 2,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 2,
-    fontSize: 14,
-    fontWeight: 'bold',
-    backgroundColor: 'rgba(247,247,247,1.0)',
+   backgroundColor: "yellow"
   },
   item: {
     padding: 10,
@@ -29,9 +21,17 @@ export default StyleSheet.create({
     height: 60,
   },
   titleStyle : {
-    fontWeight: "bold"
+    fontWeight: "bold",
+    color: "black"
   },
   descriptionStyle : {
-    marginTop: "2%"
+    marginTop: "2%",
+    color: "black"
+  },
+  fabStyle: {
+    bottom: 16,
+    right: 16,
+    position: 'absolute',
+    backgroundColor: "black",
   }
 })
