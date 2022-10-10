@@ -82,7 +82,7 @@ const ListPublicationsScreen = () => {
           icon={'plus'}
           label={'Agregar'}
           extended={isExtended}
-          onPress={() => navigation.navigate("CreatePublication")}
+          onPress={() => navigation.navigate("ViewCreateEditPublication", { typeView: "CREATE"})}
           visible={true}
           animateFrom={'right'}
           iconMode={'dynamic'}
@@ -94,7 +94,8 @@ const ListPublicationsScreen = () => {
           visible={visibleMenu}
           onDismiss={closeMenu}
           >
-          <Menu.Item onPress={() => { console.log(section.key); setVisibleMenu(!visibleMenu); }} title="Editar" />
+          <Menu.Item onPress={() => { setVisibleMenu(!visibleMenu); navigation.navigate("ViewCreateEditPublication", { typeView: "VIEW", data: JSON.stringify(section) }) }} title="Ver" />
+          <Menu.Item onPress={() => { setVisibleMenu(!visibleMenu); navigation.navigate("ViewCreateEditPublication", { typeView: "EDIT", data: JSON.stringify(section) }) }} title="Editar" />
           <Menu.Item onPress={() => { 
             Alert.alert(
               "Alerta",

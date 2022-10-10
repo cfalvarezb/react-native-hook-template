@@ -43,4 +43,9 @@ export default StyleSheet.create({
     padding: 10,
     color: "black"
   },
+  tinyLogo: {
+    width: 200,
+    height: 200,
+    marginLeft: 100,
+  },
 });
