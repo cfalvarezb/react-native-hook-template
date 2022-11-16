@@ -51,7 +51,7 @@ const ListPublicationsScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView onScroll={onScroll}>
         <Divider bold={true} style={{"marginTop": "2%", "marginBottom": "2%"}}/>
-        <Text variant="displaySmall">Lista De Publicaciones</Text>
+        <Text style={styles.titleStyle} variant="displaySmall">Lista De Publicaciones</Text>
         <Divider bold={true} style={{"marginTop": "2%","marginBottom": "4%"}}/>
         
         {
@@ -88,7 +88,7 @@ const ListPublicationsScreen = () => {
           iconMode={'dynamic'}
           style={[styles.fabStyle, fabStyle]}
           color={"white"}
-        />
+      />
         <Menu
           anchor={pageXY}
           visible={visibleMenu}

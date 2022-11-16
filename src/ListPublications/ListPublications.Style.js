@@ -9,7 +9,7 @@ export default StyleSheet.create({
   container: {
     flexGrow: 1,
    paddingTop: 22,
-   backgroundColor: "yellow"
+   backgroundColor: "white"
   },
   item: {
     padding: 10,

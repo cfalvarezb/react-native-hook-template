@@ -22,6 +22,7 @@ const ViewCreateEditPublicationScreen = ({route}) => {
   const [editFirstTime, setEditFirstTime] = useState(0);
   const [lblSnackBar, setLblSnackBar] = useState("Guardada");
   const [lblButtonSubmit, setLblButtonSubmit] = useState("Crear");
+  const [showButtons, setShowButtons] = useState(true);
 
   const refTextTitle = useRef(null);
   const refTextDescription = useRef(null);
@@ -54,6 +55,7 @@ const ViewCreateEditPublicationScreen = ({route}) => {
         setLabelPublication("Ver");
         setLblButtonSubmit("Ver");
         setIsEditable(false);
+        setShowButtons(false);
         break;
       case "EDIT":
         setData(data);
@@ -160,26 +162,33 @@ const ViewCreateEditPublicationScreen = ({route}) => {
           {
             imageBase64 && imageBase64 != null && <Image style={styles.tinyLogo} source={{uri: "data:image/png;base64," + imageBase64}} />
           }
-          <Button 
-            style={styles.button}
-            onPress={ async ()=>{
-              const result = await launchImageLibrary({includeBase64: true});
-              setImageBase64(( result.didCancel ) ? imageBase64 : result.assets[0].base64);
-              validateFields();
-            }}
-            textColor={ "black" }
-            disabled={!isEditable}
-          >
-            Subir Imagen
-          </Button>
-          <Button 
-            style={styles.button}
-            onPress={onPress}
-            disabled={ buttonImageDisabled || !isEditable}
-            textColor={ "black" }
-          >
-            {lblButtonSubmit}
-          </Button>
+          { showButtons && 
+            <Button 
+              style={styles.button}
+              onPress={ async ()=>{
+                const result = await launchImageLibrary({includeBase64: true});
+                setImageBase64(( result.didCancel ) ? imageBase64 : result.assets[0].base64);
+                validateFields();
+              }}
+              disabled={!isEditable}
+              mode="contained"
+              buttonColor="silver"
+            >
+              Subir Imagen
+            </Button>
+          }
+          {
+            showButtons &&  
+            <Button 
+              style={styles.button}
+              onPress={onPress}
+              disabled={ buttonImageDisabled || !isEditable}
+              buttonColor="silver"
+              mode="contained"
+            >
+              {lblButtonSubmit}
+            </Button>
+          }
         </ScrollView>
         <Snackbar
             visible={visible}

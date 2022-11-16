@@ -15,7 +15,7 @@ export default StyleSheet.create({
   view: {
     width: "100%",
     height: "100%",
-    backgroundColor: "yellow"
+    backgroundColor: "white"
   },
   text: {
     margin: 8,
@@ -38,10 +38,10 @@ export default StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    backgroundColor: "white",
+    //backgroundColor: "gray",
     margin: 12,
     padding: 10,
-    color: "black"
+    color: "white"
   },
   tinyLogo: {
     width: 200,
