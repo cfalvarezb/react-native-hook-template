@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Alert, Image, ScrollView } from 'react-native';
+import { View, Alert, Image, ScrollView, SafeAreaView } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import database from '@react-native-firebase/database';
 import styles from './ViewCreateEditPublication.Style';
@@ -7,7 +7,7 @@ import { errorsFirebase } from '../const';
 import {getUniqueId} from 'react-native-device-info';
 import { TextInput, Button, Text, Snackbar } from 'react-native-paper';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-
+import ActivityIndicatorComponent from '../Components/ActivityIndicatorComponent';
 
 const ViewCreateEditPublicationScreen = ({route}) => {
 
@@ -23,6 +23,7 @@ const ViewCreateEditPublicationScreen = ({route}) => {
   const [lblSnackBar, setLblSnackBar] = useState("Guardada");
   const [lblButtonSubmit, setLblButtonSubmit] = useState("Crear");
   const [showButtons, setShowButtons] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
 
   const refTextTitle = useRef(null);
   const refTextDescription = useRef(null);
@@ -31,7 +32,7 @@ const ViewCreateEditPublicationScreen = ({route}) => {
 
   const onDismissSnackBar = () => setVisible(false);
 
-  const { typeView, data } = route.params;
+  const { typeView, data, key } = route.params;
 
   useEffect(() => {
 
@@ -49,6 +50,7 @@ const ViewCreateEditPublicationScreen = ({route}) => {
   }
 
   const configView = (typeView, data) => {
+
     switch (typeView) {
       case "VIEW":
         setData(data);
@@ -87,7 +89,7 @@ const ViewCreateEditPublicationScreen = ({route}) => {
     
     console.log("Device id: ", getUniqueId());
     console.log("Title y Descripcion: ", textTitle + textDescription);
-
+    setShowLoading(!showLoading);
     if (typeView == "CREATE") {
 
       database().ref('publications').push({
@@ -99,6 +101,7 @@ const ViewCreateEditPublicationScreen = ({route}) => {
         onChangeTextDescription(null);
         onChangeTextTitle(null);
         setImageBase64(null);
+        setShowLoading(false);
         setLblSnackBar("Guardada");
         setVisible(!visible);
       }).catch((err)=> {
@@ -111,12 +114,13 @@ const ViewCreateEditPublicationScreen = ({route}) => {
 
       let result = JSON.parse(data);
 
-      database().ref('publications/' + result.key).update({
+      database().ref('publications/' + key).update({
         title: textTitle,
         description: textDescription,
         imageBase64: imageBase64,
         getUniqueId: getUniqueId()
       }).then((data)=> {
+        setShowLoading(false);
         setLblSnackBar("Actualizada");
         setVisible(!visible)
       }).catch((err)=> {
@@ -124,7 +128,6 @@ const ViewCreateEditPublicationScreen = ({route}) => {
       });
 
     } 
-    
   }
 
   const validateFields = () => {
@@ -136,13 +139,19 @@ const ViewCreateEditPublicationScreen = ({route}) => {
   }
 
   return (
-    <View style={styles.view}>
+    <>
+    <SafeAreaView style={styles.view}>
+      { (showLoading) ? 
+        <ActivityIndicatorComponent animating={showLoading} style={styles.loading} size={"large"} />
+      :
       <ScrollView>
           <Text variant="displaySmall" style={styles.text}>{labelPublication} Publicacion</Text>
           <TextInput
             style={styles.input}
             onChangeText={onChangeTextTitle}
             value={textTitle}
+            multiline={true}
+            numberOfLines={1}
             label={"Titulo"}
             ref={refTextTitle}
             textColor={ "black" }
@@ -171,8 +180,9 @@ const ViewCreateEditPublicationScreen = ({route}) => {
                 validateFields();
               }}
               disabled={!isEditable}
-              mode="contained"
-              buttonColor="silver"
+              labelStyle= {styles.colorLabelButtons}
+              contentStyle= {styles.contentStyleButtons}
+              mode="elevated"
             >
               Subir Imagen
             </Button>
@@ -183,13 +193,14 @@ const ViewCreateEditPublicationScreen = ({route}) => {
               style={styles.button}
               onPress={onPress}
               disabled={ buttonImageDisabled || !isEditable}
-              buttonColor="silver"
-              mode="contained"
+              labelStyle= {styles.colorLabelButtons}
+              contentStyle= {styles.contentStyleButtons}
+              mode="elevated"
             >
               {lblButtonSubmit}
             </Button>
           }
-        </ScrollView>
+        </ScrollView>}
         <Snackbar
             visible={visible}
             onDismiss={onDismissSnackBar}
@@ -202,7 +213,8 @@ const ViewCreateEditPublicationScreen = ({route}) => {
             }}>
             Publicacion {lblSnackBar} exitosamente
         </Snackbar>
-    </View>
+      </SafeAreaView>
+      </>
   );
 
 }

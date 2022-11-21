@@ -14,6 +14,7 @@ const ListPublicationsScreen = () => {
 
   // Set an initializing state whilst Firebase connects
   const [sections, setSections] = useState(null);
+  const [sectionsOriginal, setSectionsOriginal] = useState(null);
   const [section, setSection] = useState(null);
   const [isExtended, setIsExtended] = useState(true);
   const [pageXY, setPageXY] = useState({
@@ -26,6 +27,7 @@ const ListPublicationsScreen = () => {
   const [visibleDialogComponent, setVisibleDialogComponent] = useState(false);
   const [ textInputValue, setTextInputValue ] = useState(null);
   const [ iconTopBar, setIconTopBar ] = useState("magnify");
+
   const onDismissSnackBar = () => setVisibleSnackBar(false);
 
   const navigation = useNavigation();
@@ -50,24 +52,40 @@ const ListPublicationsScreen = () => {
         })
 
         setSections(list)
+        setSectionsOriginal(list)
         setShowLoading(!setShowLoading)
       });
 
   }, []);
 
-  const _actionSearch = () => {
-    setVisibleDialogComponent(!visibleDialogComponent)
-  }
-
   const _actionDoneDialog = () => {
     console.log("Texto Dialog: ", textInputValue);
     setVisibleDialogComponent(!visibleDialogComponent)
     setIconTopBar("close-outline")
+    let newSections = []
+    sections.map((childSnapshot, index) => {
+      if (childSnapshot.val().title.toUpperCase().search(textInputValue.toUpperCase()) >= 0) {
+        newSections.push(childSnapshot);
+      }
+      
+    })
+    setSections(newSections);
   }
 
   const _actionCancelDialog = () => {
     setVisibleDialogComponent(!visibleDialogComponent)
     setIconTopBar("magnify")
+  }
+
+  const _actionSearch = () => {
+    setTextInputValue("");
+    if ( iconTopBar == "close-outline" ) {
+      setIconTopBar("magnify");
+      setSections(sectionsOriginal);
+    } else {
+      setVisibleDialogComponent(!visibleDialogComponent);
+    }
+    
   }
 
   return (
@@ -118,7 +136,13 @@ const ListPublicationsScreen = () => {
         onDismiss={closeMenu}
       >
         <Menu.Item onPress={() => { setVisibleMenu(!visibleMenu); navigation.navigate("ViewCreateEditPublication", { typeView: "VIEW", data: JSON.stringify(section) }) }} title="Ver" />
-        <Menu.Item onPress={() => { setVisibleMenu(!visibleMenu); navigation.navigate("ViewCreateEditPublication", { typeView: "EDIT", data: JSON.stringify(section) }) }} title="Editar" />
+        <Menu.Item 
+          onPress={() => { 
+            setVisibleMenu(!visibleMenu); 
+            navigation.navigate("ViewCreateEditPublication", { typeView: "EDIT", data: JSON.stringify(section), key: section.key })
+          }}
+          title="Editar" 
+        />
         <Menu.Item onPress={() => {
           Alert.alert(
             "Alerta",

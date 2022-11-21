@@ -13,9 +13,8 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   view: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "white"
+    backgroundColor: "white",
+    flexGrow: 1,
   },
   text: {
     margin: 8,
@@ -37,7 +36,7 @@ export default StyleSheet.create({
     backgroundColor: "white"
   },
   button: {
-    alignItems: "center",
+    //alignItems: "center",
     //backgroundColor: "gray",
     margin: 12,
     padding: 10,
@@ -48,4 +47,19 @@ export default StyleSheet.create({
     height: 200,
     marginLeft: 100,
   },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  colorLabelButtons: {
+    color: "black"
+  },
+  contentStyleButtons : {
+    width: "100%"
+  }
 });

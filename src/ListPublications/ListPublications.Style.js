@@ -1,9 +1,4 @@
-import React from 'react';
-import { SectionList, StyleSheet, Text, View } from 'react-native';
-import ApplicationStyle from '../Themes/Application.Style';
-import {fontFamily, fontSize} from '../const';
-import colors from '../Themes/Colors';
-import { color } from 'react-native-reanimated';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
