@@ -57,7 +57,7 @@ export default StyleSheet.create({
     justifyContent: 'center'
   },
   colorLabelButtons: {
-    color: "black"
+    color: "white"
   },
   contentStyleButtons : {
     width: "100%"

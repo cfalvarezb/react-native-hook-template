@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, ScrollView, SafeAreaView, Alert } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Image, ScrollView, SafeAreaView, Alert, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import database from '@react-native-firebase/database';
 import styles from './ListPublications.Style';
-import { errorsFirebase } from '../const';
-import { List, Text, Divider, AnimatedFAB, Menu, Snackbar, Dialog, Provider, Button, Portal, Paragraph } from 'react-native-paper';
+import { List, Divider, AnimatedFAB, Menu, Snackbar } from 'react-native-paper';
 import ActivityIndicatorComponent from '../Components/ActivityIndicatorComponent';
 import { TopBarComponent } from '../Components/TopBar';
 import { DialogComponent } from '../Components/Dialog';
@@ -27,6 +26,13 @@ const ListPublicationsScreen = () => {
   const [visibleDialogComponent, setVisibleDialogComponent] = useState(false);
   const [ textInputValue, setTextInputValue ] = useState(null);
   const [ iconTopBar, setIconTopBar ] = useState("magnify");
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    getListPublications();
+    setRefreshing(false);
+  }, []);
 
   const onDismissSnackBar = () => setVisibleSnackBar(false);
 
@@ -40,22 +46,27 @@ const ListPublicationsScreen = () => {
   const fabStyle = { ["right"]: 16 };
   const closeMenu = () => setVisibleMenu(false);
 
-  useEffect(() => {
+  const getListPublications = () => {
+
     database()
-      .ref(`publications`)
-      .on('value', snapshot => {
+    .ref(`publications`)
+    .on('value', snapshot => {
 
-        let list = [];
+      let list = [];
 
-        snapshot.forEach((childSnapshot) => {
-          list.push(childSnapshot);
-        })
+      snapshot.forEach((childSnapshot) => {
+        list.push(childSnapshot);
+      })
 
-        setSections(list)
-        setSectionsOriginal(list)
-        setShowLoading(!setShowLoading)
-      });
+      setSections(list)
+      setSectionsOriginal(list)
+      setShowLoading(!setShowLoading)
+    });
 
+  }
+
+  useEffect(() => {
+    getListPublications();
   }, []);
 
   const _actionDoneDialog = () => {
@@ -91,7 +102,15 @@ const ListPublicationsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ActivityIndicatorComponent animating={showLoading} style={styles.loading} size={"large"} />
-      <ScrollView onScroll={onScroll}>
+      <ScrollView 
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        } 
+        onScroll={onScroll}
+      >
 
         <TopBarComponent title={"Lista De Publicaciones"} search={_actionSearch} icon={iconTopBar} />
         <Divider bold={true} style={{ "marginTop": "2%", "marginBottom": "4%" }} />
@@ -119,23 +138,27 @@ const ListPublicationsScreen = () => {
           })
         }
       </ScrollView>
-      <AnimatedFAB
-        icon={'plus'}
-        label={'Agregar'}
-        extended={isExtended}
-        onPress={() => navigation.navigate("ViewCreateEditPublication", { typeView: "CREATE" })}
-        visible={true}
-        animateFrom={'right'}
-        iconMode={'dynamic'}
-        style={[styles.fabStyle, fabStyle]}
-        color={"white"}
-      />
+
+      
+        <AnimatedFAB
+          icon={'plus'}
+          label={'Agregar'}
+          extended={isExtended}
+          onPress={() => navigation.navigate("ViewCreateEditPublication", { typeView: "CREATE" })}
+          visible={true}
+          animateFrom={'right'}
+          iconMode={'dynamic'}
+          style={[styles.fabStyle, fabStyle]}
+          color={"white"}
+        />
+      
       <Menu
         anchor={pageXY}
         visible={visibleMenu}
         onDismiss={closeMenu}
       >
         <Menu.Item onPress={() => { setVisibleMenu(!visibleMenu); navigation.navigate("ViewCreateEditPublication", { typeView: "VIEW", data: JSON.stringify(section) }) }} title="Ver" />
+        
         <Menu.Item 
           onPress={() => { 
             setVisibleMenu(!visibleMenu); 
@@ -162,7 +185,7 @@ const ListPublicationsScreen = () => {
           setVisibleMenu(!visibleMenu);
         }}
           title="Eliminar"
-        />
+      />
       </Menu>
 
       <DialogComponent 
